@@ -6,8 +6,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
   entry: {
     app: './js/app.jsx',
-    // styles: './css/main.css',
-    // font: './font-awesome-4.6.3/css/font-awesome.min.css'
+    styles: './css/main.css'
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -22,31 +21,36 @@ module.exports = {
         query: {
           presets: ['es2015', 'react']
         }
+      }, {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
+      }, {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+      }, {
+        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+      }, {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url-loader?limit=10000&mimetype=application/octet-stream"
+      }, {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "file-loader"
+      }, {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "url-loader?limit=10000&mimetype=image/svg+xml"
       }
-    ],
-    // rules: [{
-    //   test: /\.css$/,
-    //   // use: ["style-loader", "css-loader"],
-    //   use: ExtractTextPlugin.extract({
-    //     fallback: "style-loader",
-    //     use: "css-loader"
-    //   })
-    // },
-    // {
-    //   test: /\.(ttf|eot|svg|woff|woff2|png)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    //   loader: "file-loader",
-    //   options: {
-    //     name: '[path][name].[ext]?[hash]'
-    //   }
-    // }]
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.html'
     }),
-    // new ExtractTextPlugin({
-    //   filename: '[name].css',
-    //   allChunks: true
-    // })
+    new ExtractTextPlugin({
+      filename: '[name].css'
+    })
   ]
 };
